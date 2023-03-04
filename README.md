@@ -7,16 +7,15 @@
 # 2d-Constraints-Demos
  Playing with 2d constaints
 
-- History
-	- 20230304 : Initial.
 	 
   Just playing with constraint, for advanced particle behaviour made easely. Have fun !
-        
+
+- History
+	- 20230304 : Initial.
+
 - main features : 
   - Basic constraint distance
   - Simple code for collision management.
   
- Many thanks to this blogs : 
-
 
   ![Alt text](/assets/constraintSimpleDemo.gif?raw=true "")
