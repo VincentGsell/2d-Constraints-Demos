@@ -6,16 +6,18 @@
 
 # 2d-Constraints-Demos
  Playing with 2d constaints
-
 	 
-  Just playing with constraint, for advanced particle behaviour made easely. Have fun !
-
-- History
+  Just playing with constraint under a simple Delphi FMX Project, for advanced particle behaviour made easely. Have fun !
+  
+ - History
 	- 20230304 : Initial.
 
 - main features : 
-  - Basic constraint distance
-  - Simple code for collision management.
+ 	- Basic constraint distance
+	- Simple code for collision management.
+ 
+ - Credits : 
+ 	- Mostly translate form js code, from this nice article : https://zalo.github.io/blog/constraints/
   
 
   ![Alt text](/assets/constraintSimpleDemo.gif?raw=true "")
