@@ -9,7 +9,10 @@
 	 
   Just playing with constraint under a simple Delphi FMX Project, for advanced particle behaviour made easely. Have fun !
   
- - History
+   ![Alt text](/assets/constraintSimpleDemo.gif?raw=true "")
+
+
+- History
 	- 20230304 : Initial.
 
 - main features : 
@@ -18,6 +21,4 @@
  
  - Credits : 
  	- Mostly translate form js code, from this nice article : https://zalo.github.io/blog/constraints/
-  
-
-  ![Alt text](/assets/constraintSimpleDemo.gif?raw=true "")
+ 
