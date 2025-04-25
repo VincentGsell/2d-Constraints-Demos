@@ -22,7 +22,6 @@ type
     CheckBoxFabrick: TCheckBox;
     TrackBar1: TTrackBar;
     cbBallCollision: TCheckBox;
-    TimerGravity: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure CornerButton2Click(Sender: TObject);
 
@@ -75,7 +74,7 @@ var
   FMain: TFMain;
 
 Const cst_SEPARATECOLL_BALL_COUNT = 40;
-      cst_CHAIN_BALL_COUNT = 10;
+      cst_CHAIN_BALL_COUNT = 20;
 
 
 implementation

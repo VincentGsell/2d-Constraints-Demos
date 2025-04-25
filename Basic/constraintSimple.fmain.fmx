@@ -164,9 +164,4 @@ object FMain: TFMain
       end
     end
   end
-  object TimerGravity: TTimer
-    Interval = 1
-    Left = 432
-    Top = 432
-  end
 end
