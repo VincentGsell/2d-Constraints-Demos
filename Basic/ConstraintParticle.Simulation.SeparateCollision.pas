@@ -41,7 +41,7 @@ var
 begin
   inherited Create;
 
-  FIterations := 3;
+  FIterations := 1;
   FBallRadius := aBallRadius;
 
   FMainParticle.Pos := aStartPos;
