@@ -9,11 +9,14 @@
 	 
   Just playing with constraint under a simple Delphi FMX Project, for advanced particle behaviour made easely. Have fun !
   
-   ![Alt text](/assets/constraintSimpleDemo.gif?raw=true "")
+   ![Alt text](/assets/constraintSimpleDemo.gif?raw=true "fluids animation")
+   ![Alt text](/assets/CosntraintDistance4000Particles.png "after 2026 optimisation ;) 4000 particles")
 
 
 - History
 	- 20230304 : Initial.
+	- 20260109 : Optimisation (spatial hash, remove FMX Widget for FMX2D direct paint, use array and record.)
+   
 
 - main features : 
  	- Basic constraint distance
