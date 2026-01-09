@@ -14,7 +14,7 @@ object FMain: TFMain
     HideSelection = False
     Proportional = False
     Position.X = 24.000000000000000000
-    Position.Y = 479.000000000000000000
+    Position.Y = 410.000000000000000000
     Size.Width = 129.000000000000000000
     Size.Height = 225.000000000000000000
     Size.PlatformDefault = False
@@ -58,7 +58,7 @@ object FMain: TFMain
         TextSettings.Trimming = None
         XRadius = 3.000000000000000000
         YRadius = 3.000000000000000000
-        OnClick = CornerButton2Click
+        OnClick = CornerButton1Click
       end
       object CornerButton2: TCornerButton
         Tag = 20
@@ -77,7 +77,7 @@ object FMain: TFMain
         TextSettings.Trimming = None
         XRadius = 3.000000000000000000
         YRadius = 3.000000000000000000
-        OnClick = CornerButton2Click
+        OnClick = CornerButton1Click
       end
       object CornerButton3: TCornerButton
         Tag = 30
@@ -96,7 +96,7 @@ object FMain: TFMain
         TextSettings.Trimming = None
         XRadius = 3.000000000000000000
         YRadius = 3.000000000000000000
-        OnClick = CornerButton2Click
+        OnClick = CornerButton1Click
       end
     end
   end
@@ -104,8 +104,8 @@ object FMain: TFMain
     GripSize = 3.000000000000000000
     HideSelection = False
     Proportional = False
-    Position.X = 161.000000000000000000
-    Position.Y = 540.000000000000000000
+    Position.X = 185.000000000000000000
+    Position.Y = 487.000000000000000000
     Size.Width = 121.000000000000000000
     Size.Height = 156.000000000000000000
     Size.PlatformDefault = False

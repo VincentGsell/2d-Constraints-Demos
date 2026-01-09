@@ -148,6 +148,11 @@
             <Form>FMain</Form>
             <FormType>fmx</FormType>
         </DCCReference>
+        <DCCReference Include="ConstraintParticle.pas"/>
+        <DCCReference Include="ConstraintParticle.Renderer.FMX2D.pas"/>
+        <DCCReference Include="ConstraintParticle.Simulation.BasicDistance.pas"/>
+        <DCCReference Include="ConstraintParticle.Simulation.SeparateCollision.pas"/>
+        <DCCReference Include="ConstraintParticle.Simulation.DistanceChain.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
