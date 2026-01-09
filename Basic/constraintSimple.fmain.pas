@@ -1,15 +1,21 @@
-unit constraintSimple.fmain;
+﻿unit constraintSimple.fmain;
 
 interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  System.Generics.Collections,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Objects,
-  FMX.Controls.Presentation, FMX.StdCtrls, System.Math,
-  GS.Geometry.Direction;
+  FMX.Controls.Presentation, FMX.StdCtrls, System.Math;
 
 type
   TConstraintScene = (basicDistance,SeparateCollision,DistanceChain);
+
+  TBallData = record
+    Pos: TPointF;
+    Radius: single;
+    Color: TAlphaColor;
+  end;
 
   TFMain = class(TForm)
     Selection1: TSelection;
@@ -28,6 +34,11 @@ type
     function getRandomColor : TAlphaColor;
   private
     FCurrentScene : TConstraintScene;
+    //Rendu direct pour SeparateCollision
+    FPaintBox: TPaintBox;
+    FBallsData: TArray<TBallData>;
+    FMainBallData: TBallData;
+    procedure PaintBoxPaint(Sender: TObject; Canvas: TCanvas);
     procedure SetConstaintScene(const Value: TConstraintScene);
     function GetCircles(Index: integer): TCircle;
     { Private declarations }
@@ -70,10 +81,25 @@ type
     class function Distance(point, anchor: TPointF; distance: Double): TPointF;
   end;
 
+  TSpatialHash = class
+  private
+    FCellSize: Single;
+    FCells: TDictionary<Int64, TList<Integer>>;
+    function GetCellKey(X, Y: Integer): Int64; inline;
+  public
+    constructor Create(aCellSize: Single);
+    destructor Destroy; override;
+    procedure Clear;
+    procedure Insert(aIndex: Integer; const aPos: TPointF);
+    procedure GetNearby(const aPos: TPointF; aResult: TList<Integer>);
+  end;
+
 var
   FMain: TFMain;
 
-Const cst_SEPARATECOLL_BALL_COUNT = 40;
+Const cst_SEPARATECOLL_BALL_COUNT = 4000;
+      cst_SEPARATECOLL_BALLSIZE = 5;
+      cst_SEPARATECOLL_ITERATIONS = 3;
       cst_CHAIN_BALL_COUNT = 20;
 
 
@@ -82,6 +108,70 @@ implementation
 class function TConstraintResolver.Distance(point, anchor: TPointF; distance: Double): TPointF;
 begin
   Result := (point - anchor).Normalize * distance + anchor;
+end;
+
+{ TSpatialHash }
+
+constructor TSpatialHash.Create(aCellSize: Single);
+begin
+  inherited Create;
+  FCellSize := aCellSize;
+  FCells := TDictionary<Int64, TList<Integer>>.Create;
+end;
+
+destructor TSpatialHash.Destroy;
+var
+  lst: TList<Integer>;
+begin
+  for lst in FCells.Values do
+    lst.Free;
+  FCells.Free;
+  inherited;
+end;
+
+function TSpatialHash.GetCellKey(X, Y: Integer): Int64;
+begin
+  Result := (Int64(X) shl 32) or (Int64(Y) and $FFFFFFFF);
+end;
+
+procedure TSpatialHash.Clear;
+var
+  lst: TList<Integer>;
+begin
+  for lst in FCells.Values do
+    lst.Clear;
+end;
+
+procedure TSpatialHash.Insert(aIndex: Integer; const aPos: TPointF);
+var
+  cellX, cellY: Integer;
+  key: Int64;
+  lst: TList<Integer>;
+begin
+  cellX := Trunc(aPos.X / FCellSize);
+  cellY := Trunc(aPos.Y / FCellSize);
+  key := GetCellKey(cellX, cellY);
+  if not FCells.TryGetValue(key, lst) then begin
+    lst := TList<Integer>.Create;
+    FCells.Add(key, lst);
+  end;
+  lst.Add(aIndex);
+end;
+
+procedure TSpatialHash.GetNearby(const aPos: TPointF; aResult: TList<Integer>);
+var
+  cellX, cellY, dx, dy: Integer;
+  key: Int64;
+  lst: TList<Integer>;
+begin
+  cellX := Trunc(aPos.X / FCellSize);
+  cellY := Trunc(aPos.Y / FCellSize);
+  for dx := -1 to 1 do
+    for dy := -1 to 1 do begin
+      key := GetCellKey(cellX + dx, cellY + dy);
+      if FCells.TryGetValue(key, lst) then
+        aResult.AddRange(lst);
+    end;
 end;
 
 {$R *.fmx}
@@ -115,8 +205,49 @@ end;
 
 procedure TFMain.FormCreate(Sender: TObject);
 begin
+  FPaintBox := TPaintBox.Create(Self);
+  FPaintBox.Parent := Self;
+  FPaintBox.Align := TAlignLayout.Client;
+  FPaintBox.OnPaint := PaintBoxPaint;
+  FPaintBox.Visible := False;
+  FPaintBox.HitTest := False;
+
   SelectionConstraintChainSubMenu.Visible := false;
   CornerButton1.OnClick(CornerButton1);
+end;
+
+procedure TFMain.PaintBoxPaint(Sender: TObject; Canvas: TCanvas);
+var
+  i: integer;
+  r: TRectF;
+begin
+  Canvas.BeginScene;
+  try
+    //Main circle
+    Canvas.Fill.Color := FMainBallData.Color;
+    r := RectF(
+      FMainBallData.Pos.X - FMainBallData.Radius,
+      FMainBallData.Pos.Y - FMainBallData.Radius,
+      FMainBallData.Pos.X + FMainBallData.Radius,
+      FMainBallData.Pos.Y + FMainBallData.Radius
+    );
+    Canvas.FillEllipse(r, 1);
+
+    //All balls
+    for i := 0 to High(FBallsData) do
+    begin
+      Canvas.Fill.Color := FBallsData[i].Color;
+      r := RectF(
+        FBallsData[i].Pos.X - FBallsData[i].Radius,
+        FBallsData[i].Pos.Y - FBallsData[i].Radius,
+        FBallsData[i].Pos.X + FBallsData[i].Radius,
+        FBallsData[i].Pos.Y + FBallsData[i].Radius
+      );
+      Canvas.FillEllipse(r, 1);
+    end;
+  finally
+    Canvas.EndScene;
+  end;
 end;
 
 procedure TFMain.FormMouseMove_DistanceConstraintChain(Sender: TObject;
@@ -196,47 +327,68 @@ procedure TFMain.FormMouseMove_SeparateCollision(Sender: TObject;
   Shift: TShiftState; X, Y: Single);
 var toNext : TPointf;
     mousecoord : TPointf;
-    circle,b : TCCircle;
-    balls : TArray<TCCircle>;
-    i,j : integer;
+    i, j, k, iter : integer;
     lradius : single;
     loffset : TPointF;
-    lDir : TDirectionalObject;
+    hash: TSpatialHash;
+    nearby: TList<Integer>;
 begin
-  circle := TCCircle(Circles[0]);
-  setLength(balls,cst_SEPARATECOLL_BALL_COUNT);
-  for i := 1 to cst_SEPARATECOLL_BALL_COUNT do
-    balls[i-1] := TCCircle(Circles[i]);
-
   mousecoord := Pointf(x,y);
-
-  Circle.pos := mousecoord;
+  FMainBallData.Pos := mousecoord;
 
   //Constraint for main circle.
-  for b in balls do begin
-    toNext := Circle.pos - b.pos;
-    if toNext.Length<circle.radius+b.radius then
-      toNext.setLength(circle.radius+b.radius);
-      loffset := circle.pos - b.pos - toNext;
-      b.pos := b.pos + loffset;
+  for i := 0 to High(FBallsData) do
+  begin
+    toNext := FMainBallData.Pos - FBallsData[i].Pos;
+    if toNext.Length < FMainBallData.Radius + FBallsData[i].Radius then
+    begin
+      toNext.setLength(FMainBallData.Radius + FBallsData[i].Radius);
+      loffset := FMainBallData.Pos - FBallsData[i].Pos - toNext;
+      FBallsData[i].Pos := FBallsData[i].Pos + loffset;
+    end;
   end;
 
-  //separate balls
-  for i := 0 to length(balls)-1 do
-    for j := i to length(balls)-1 do begin
-      if balls[i] = balls[j] then
-        continue;
+  //separate balls - spatial hash O(n) avec iterations multiples
+  hash := TSpatialHash.Create(cst_SEPARATECOLL_BALLSIZE * 2);
+  nearby := TList<Integer>.Create;
+  try
+    for iter := 1 to cst_SEPARATECOLL_ITERATIONS do
+    begin
+      //Remplir le hash
+      hash.Clear;
+      for i := 0 to High(FBallsData) do
+        hash.Insert(i, FBallsData[i].Pos);
 
-      toNext := balls[j].pos - balls[i].pos;
-      lradius := balls[j].radius + balls[i].radius;
-      if toNext.Length <= lradius then begin
-        toNext.setLength(lradius);
-        loffset := balls[j].pos - balls[i].pos - toNext;
-        loffset := loffset/2;
-        balls[i].pos := balls[i].pos + loffset;
-        balls[j].pos := balls[j].pos - loffset;
+      //Tester collisions avec voisins uniquement
+      for i := 0 to High(FBallsData) do
+      begin
+        nearby.Clear;
+        hash.GetNearby(FBallsData[i].Pos, nearby);
+        for k := 0 to nearby.Count - 1 do
+        begin
+          j := nearby[k];
+          if j <= i then
+            Continue;
+
+          toNext := FBallsData[j].Pos - FBallsData[i].Pos;
+          lradius := FBallsData[j].Radius + FBallsData[i].Radius;
+          if toNext.Length <= lradius then
+          begin
+            toNext.setLength(lradius);
+            loffset := FBallsData[j].Pos - FBallsData[i].Pos - toNext;
+            loffset := loffset / 2;
+            FBallsData[i].Pos := FBallsData[i].Pos + loffset;
+            FBallsData[j].Pos := FBallsData[j].Pos - loffset;
+          end;
+        end;
       end;
     end;
+  finally
+    nearby.Free;
+    hash.Free;
+  end;
+
+  FPaintBox.Repaint;
 end;
 
 function TFMain.GetCircles(Index: integer): TCircle;
@@ -267,6 +419,7 @@ begin
   CornerButton2.IsPressed := false;
   CornerButton3.IsPressed := false;
   SelectionConstraintChainSubMenu.Visible := False;
+  FPaintBox.Visible := False;
   OnMouseMove := nil;
 
   clearScene;
@@ -281,17 +434,30 @@ begin
 
     SeparateCollision: begin
       CornerButton2.IsPressed := true;
-      addCircle(50,pointF(400,400),TAlphaColors.White);
+      FPaintBox.Visible := True;
+      FPaintBox.BringToFront;
+      Selection1.BringToFront;
+
+      //Init main ball data
+      FMainBallData.Pos := PointF(400, 400);
+      FMainBallData.Radius := 50;
+      FMainBallData.Color := TAlphaColors.White;
+
+      //Init balls data
+      SetLength(FBallsData, cst_SEPARATECOLL_BALL_COUNT);
       xj := 0;
-      yj := xj;
-      for i := 1 to cst_SEPARATECOLL_BALL_COUNT do begin
-        if i Mod 10 = 0 then begin
+      yj := 0;
+      for i := 0 to cst_SEPARATECOLL_BALL_COUNT - 1 do begin
+        if (i > 0) and (i Mod 50 = 0) then begin
           xj := 0;
           inc(yj);
         end;
-        addCircle(15,pointF(400+(xj*20),400+(yj*20)),getRandomColor);
+        FBallsData[i].Pos := PointF(500 + (xj * cst_SEPARATECOLL_BALLSIZE), 400 + (yj * cst_SEPARATECOLL_BALLSIZE));
+        FBallsData[i].Radius := cst_SEPARATECOLL_BALLSIZE;
+        FBallsData[i].Color := getRandomColor;
         inc(xj);
       end;
+
       OnMouseMove := FormMouseMove_SeparateCollision;
     end;
 
@@ -336,19 +502,14 @@ end;
 { TPointFTool }
 
 procedure TPointFTool.setLength(aNewLength: single);
-var l  : TDirectionalObject;
-    la : TPt;
+var
+  currentLength: single;
 begin
-  la := point(X,Y);
-  l := TDirectionalObject.Create(0,0,1);
-  try
-    l.LookAt(la);
-    l.Norm := aNewLength;
-    la := l.GetPointedCoord;
-    X := la.X;
-    Y := la.Y;
-  finally
-    FreeAndNil(l);
+  currentLength := Sqrt(X * X + Y * Y);
+  if currentLength > 0 then
+  begin
+    X := X / currentLength * aNewLength;
+    Y := Y / currentLength * aNewLength;
   end;
 end;
 
