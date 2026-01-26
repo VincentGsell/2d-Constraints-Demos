@@ -1,0 +1,170 @@
+object FMain: TFMain
+  Left = 0
+  Top = 0
+  Caption = 'Constraint Basic Test '
+  ClientHeight = 716
+  ClientWidth = 1073
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object Selection1: TSelection
+    GripSize = 3.000000000000000000
+    HideSelection = False
+    Proportional = False
+    Position.X = 24.000000000000000000
+    Position.Y = 410.000000000000000000
+    Size.Width = 129.000000000000000000
+    Size.Height = 225.000000000000000000
+    Size.PlatformDefault = False
+    ShowHandles = True
+    object Rectangle1: TRectangle
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      Fill.Kind = Gradient
+      Fill.Gradient.Points = <
+        item
+          Color = xFF3E3AB3
+          Offset = 0.000000000000000000
+        end
+        item
+          Color = claWhite
+          Offset = 1.000000000000000000
+        end>
+      Fill.Gradient.StartPosition.X = 0.500000000000000000
+      Fill.Gradient.StartPosition.Y = 1.000000000000000000
+      Fill.Gradient.StopPosition.X = 0.499999970197677600
+      Fill.Gradient.StopPosition.Y = 0.000000000000000000
+      HitTest = False
+      Opacity = 0.800000011920929000
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 113.000000000000000000
+      Size.Height = 209.000000000000000000
+      Size.PlatformDefault = False
+      object CornerButton1: TCornerButton
+        Tag = 10
+        StaysPressed = True
+        Anchors = [akLeft, akTop, akRight]
+        IsPressed = True
+        Position.X = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Sides = [Top, Left, Bottom, Right]
+        Size.Width = 97.000000000000000000
+        Size.Height = 41.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'basic constraint'
+        TextSettings.Trimming = None
+        XRadius = 3.000000000000000000
+        YRadius = 3.000000000000000000
+        OnClick = CornerButton1Click
+      end
+      object CornerButton2: TCornerButton
+        Tag = 20
+        StaysPressed = True
+        Anchors = [akLeft, akTop, akRight]
+        IsPressed = True
+        Position.X = 8.000000000000000000
+        Position.Y = 53.000000000000000000
+        Sides = [Top, Left, Bottom, Right]
+        Size.Width = 97.000000000000000000
+        Size.Height = 41.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Collision constraint'
+        TextSettings.WordWrap = True
+        TextSettings.Trimming = None
+        XRadius = 3.000000000000000000
+        YRadius = 3.000000000000000000
+        OnClick = CornerButton1Click
+      end
+      object CornerButton3: TCornerButton
+        Tag = 30
+        StaysPressed = True
+        Anchors = [akLeft, akTop, akRight]
+        IsPressed = True
+        Position.X = 8.000000000000000000
+        Position.Y = 97.000000000000000000
+        Sides = [Top, Left, Bottom, Right]
+        Size.Width = 97.000000000000000000
+        Size.Height = 41.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Distance constraint chain'
+        TextSettings.WordWrap = True
+        TextSettings.Trimming = None
+        XRadius = 3.000000000000000000
+        YRadius = 3.000000000000000000
+        OnClick = CornerButton1Click
+      end
+    end
+  end
+  object SelectionConstraintChainSubMenu: TSelection
+    GripSize = 3.000000000000000000
+    HideSelection = False
+    Proportional = False
+    Position.X = 185.000000000000000000
+    Position.Y = 487.000000000000000000
+    Size.Width = 121.000000000000000000
+    Size.Height = 156.000000000000000000
+    Size.PlatformDefault = False
+    ShowHandles = True
+    object Rectangle2: TRectangle
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      Fill.Kind = Gradient
+      Fill.Gradient.Points = <
+        item
+          Color = xFF3E3AB3
+          Offset = 0.000000000000000000
+        end
+        item
+          Color = claWhite
+          Offset = 1.000000000000000000
+        end>
+      Fill.Gradient.StartPosition.X = 0.500000000000000000
+      Fill.Gradient.StartPosition.Y = 1.000000000000000000
+      Fill.Gradient.StopPosition.X = 0.499999970197677600
+      Fill.Gradient.StopPosition.Y = 0.000000000000000000
+      HitTest = False
+      Opacity = 0.800000011920929000
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 105.000000000000000000
+      Size.Height = 140.000000000000000000
+      Size.PlatformDefault = False
+      object CheckBoxFabrick: TCheckBox
+        Position.X = 9.000000000000000000
+        Position.Y = 55.000000000000000000
+        Size.Width = 88.000000000000000000
+        Size.Height = 35.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'F.A.B.R.I.C.K mode'
+        TextSettings.WordWrap = True
+      end
+      object TrackBar1: TTrackBar
+        CanParentFocus = True
+        Min = 1.000000000000000000
+        Orientation = Horizontal
+        Position.X = 9.000000000000000000
+        Position.Y = 19.000000000000000000
+        Size.Width = 85.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Value = 30.000000000000000000
+      end
+      object cbBallCollision: TCheckBox
+        Position.X = 9.000000000000000000
+        Position.Y = 97.000000000000000000
+        Size.Width = 88.000000000000000000
+        Size.Height = 35.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'balls collision'
+        TextSettings.WordWrap = True
+      end
+    end
+  end
+end
