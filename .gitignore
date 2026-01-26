@@ -60,6 +60,8 @@
 # Delphi history and backups
 __history/
 __recovery/
+R&D/
+Binaries
 *.~*
 
 # Castalia statistics file (since XE7 Castalia is distributed with Delphi)
@@ -67,3 +69,38 @@ __recovery/
 
 # Boss dependency manager vendor folder https://github.com/HashLoad/boss
 modules/
+*.vsd
+*.pdn
+*.local
+*.local
+
+#projet related
+
+*.xml
+*.dex
+
+# AI
+CLAUDE.MD
+IDEAS.MD
+.claude
+
+#
+# Rust
+#
+# Rust's Cargo generated file
+target/
+Cargo.lock
+
+# rust-analyzer and tools dependancy mess.
+*.d
+
+# binaries and cache
+**/*.rs.bk
+**/*.swp
+**/*.swo
+
+# IDE stuffs
+.idea/
+.vscode/
+*.swp
+*.swo

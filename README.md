@@ -6,17 +6,18 @@
 
 # 2d-Constraints-Demos
  Playing with 2d constaints
+
+#History 
+ 20260121 - VGS - Rust port.
+ 20260109 - VGS - Optimisation (spatial hash, remove FMX Widget for FMX2D direct paint, use array and record.)
+ 20230304 - VGS - Initial.
+
 	 
-  Just playing with constraint under a simple Delphi FMX Project, for advanced particle behaviour made easely. Have fun !
+  Just playing with constraint under a simple Delphi - and now rust - Project, for advanced particle behaviour, always made to be understandable and easely. Have fun !
   
    ![Alt text](/assets/constraintSimpleDemo.gif?raw=true "fluids animation")
    ![Alt text](/assets/CosntraintDistance4000Particles.png "after 2026 optimisation ;) 4000 particles")
-
-
-- History
-	- 20230304 : Initial.
-	- 20260109 : Optimisation (spatial hash, remove FMX Widget for FMX2D direct paint, use array and record.)
-   
+   ![Alt text](/assets/rust-constraintDistance.png?raw=true "rust version")
 
 - main features : 
  	- Basic constraint distance
