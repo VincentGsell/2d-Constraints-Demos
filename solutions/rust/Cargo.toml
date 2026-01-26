@@ -1,0 +1,47 @@
+# =============================================================================
+# Cargo.toml - Fichier de configuration du projet Rust
+# =============================================================================
+# Ce fichier définit les métadonnées du projet et ses dépendances.
+# Cargo est le gestionnaire de paquets et l'outil de build de Rust.
+#
+# Pour compiler : cargo build
+# Pour exécuter : cargo run
+# Pour compiler en release (optimisé) : cargo build --release
+# =============================================================================
+
+[package]
+# Nom du projet - utilisé pour le binaire généré
+name = "constraint-particles-2d"
+
+# Version sémantique (MAJOR.MINOR.PATCH)
+version = "0.1.0"
+
+# Edition de Rust à utiliser (2021 est la plus récente stable)
+# Chaque édition apporte des améliorations au langage
+edition = "2021"
+
+# Description du projet
+description = "Démonstration de contraintes 2D sur des particules - Portage Rust"
+
+# Auteurs du projet
+authors = ["Vincent Gsell"]
+
+[dependencies]
+# macroquad : Bibliothèque graphique simple et performante pour le 2D
+# - Inspirée de raylib (C)
+# - API minimaliste et intuitive
+# - Gère la fenêtre, les entrées, et le rendu
+# - Parfaite pour l'apprentissage et le prototypage rapide
+macroquad = "0.4"
+
+# rand : Génération de nombres aléatoires
+# - Utilisé pour les couleurs aléatoires des particules
+# - Crate standard pour l'aléatoire en Rust
+rand = "0.8"
+
+# =============================================================================
+# Notes sur les dépendances Rust :
+# - Les dépendances sont téléchargées depuis crates.io (le registre officiel)
+# - Le fichier Cargo.lock (généré automatiquement) verrouille les versions exactes
+# - "0.4" signifie ">=0.4.0 et <0.5.0" (compatibilité sémantique)
+# =============================================================================
